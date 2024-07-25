@@ -2,6 +2,8 @@ package stepDefinitions;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -26,6 +28,7 @@ public class hooks {
 		
 	    testContext.driver = new ChromeDriver(chromeOptions);
 	    testContext.driver.get("https://bolttech.co.th/en/ascend/device-protection?utm_source=ascend");
+	    testContext.driver.findElement(By.xpath("//*[@id='onetrust-close-btn-container']/button")).click();
 	}
 	
 	@After 
