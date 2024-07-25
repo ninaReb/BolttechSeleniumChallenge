@@ -25,7 +25,6 @@ Feature: Selenium automation challenge
   @req1
   Scenario: Verify device price dropdown loads
     
-    And I disable any ad blocker on my browser
     When I wait for the dropdown list of price ranges to be visible
     Then the dropdown list should be visible
 

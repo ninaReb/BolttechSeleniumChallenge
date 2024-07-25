@@ -7,27 +7,31 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import utils.TestContext;
 
 public class hooks {
-	public WebDriver driver;
+	TestContext testContext;
+	public hooks(TestContext testContext) {
+		this.testContext = testContext;
+	};
+	
 	@Before 
 	public void BoltChallengeSetup(){
 		System.out.println("before");
 		System.setProperty("webdriver.chrome.driver","chromedriver-win64/chromedriver.exe");
-		
 	    Map<String, String> mobileEmulation = new HashMap<>();
 	    mobileEmulation.put("deviceName", "Nexus 5");
 	    ChromeOptions chromeOptions = new ChromeOptions();
 	    chromeOptions.setExperimentalOption("mobileEmulation", mobileEmulation);
 		
-		driver = new ChromeDriver(chromeOptions);
-		driver.get("https://bolttech.co.th/en/ascend/device-protection?utm_source=ascend");
+	    testContext.driver = new ChromeDriver(chromeOptions);
+	    testContext.driver.get("https://bolttech.co.th/en/ascend/device-protection?utm_source=ascend");
 	}
 	
 	@After 
 	public void tearDown(){
 		System.out.println("tearDown");
-		driver.quit();
+		testContext.driver.quit();
 	}
 	
 
