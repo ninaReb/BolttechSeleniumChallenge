@@ -29,6 +29,11 @@ public class LandingPageStepDefinition {
 	WebElement randomItem;
 	String landingUTM;
 	String paymentUTM;
+	String prevPrice;
+	String prevName;
+	
+	
+	
 	@Given("I navigate to the Main Page")
 	public void i_navigate_to_main_page() {
 		String currentURL = testContext.driver.getCurrentUrl();
@@ -141,7 +146,7 @@ public class LandingPageStepDefinition {
 		SearchContext tertiaryRootNode = tertiaryRootHost.getShadowRoot();
 		WebElement buttonRootHost = tertiaryRootNode.findElement(By.cssSelector(".edi-submit-cta"));
 		SearchContext buttonRootNode = buttonRootHost.getShadowRoot();
-		WebElement selectButton = tertiaryRootNode.findElement(By.cssSelector("edi-cta__button"));
+		WebElement selectButton = buttonRootNode.findElement(By.cssSelector(".edi-cta__button"));
 		selectButton.click();
 		System.out.println("clicked select");
 	}
@@ -158,7 +163,7 @@ public class LandingPageStepDefinition {
 		SearchContext rootNode = shadowHost.getShadowRoot();
 		WebElement secondaryRootHost = rootNode.findElement(By.cssSelector("edi-product-summary"));
 		SearchContext secondaryRootNode = secondaryRootHost.getShadowRoot();
-		WebElement summary = secondaryRootHost.findElement(By.cssSelector("#productSummary"));
+		WebElement summary = secondaryRootNode.findElement(By.cssSelector("#productSummary"));
 
 		
 		Assert.assertTrue(summary.isDisplayed(), "Summary is not visible");
@@ -175,5 +180,74 @@ public class LandingPageStepDefinition {
 		paymentUTM = currentURL.substring(currentURL.lastIndexOf("?") + 1);
 		Assert.assertTrue(paymentUTM.contains(landingUTM));
 	}
+	
+	@When("I navigate to the checkout page")
+	public void i_navigate_to_the_checkout_page() {
+		WebElement secondaryRootHost = testContext.driver.findElement(By.cssSelector("edi-card-slider > edi-card-vertical"));
+		SearchContext secondaryRootNode = secondaryRootHost.getShadowRoot();
+		WebElement tertiaryRootHost = secondaryRootNode.findElement(By.cssSelector("edi-card-vertical-content"));
+		SearchContext tertiaryRootNode = tertiaryRootHost.getShadowRoot();
+		prevName  = tertiaryRootNode.findElement(By.cssSelector(".card-title")).getText();
+		WebElement priceHost = tertiaryRootNode.findElement(By.cssSelector("edi-counter"));
+		SearchContext priceNode = tertiaryRootHost.getShadowRoot();
+		prevPrice = priceNode.findElement(By.cssSelector(".counter-val")).getText();
+		WebElement buttonRootHost = tertiaryRootNode.findElement(By.cssSelector(".edi-submit-cta"));
+		SearchContext buttonRootNode = buttonRootHost.getShadowRoot();
+		WebElement selectButton = buttonRootNode.findElement(By.cssSelector("edi-cta__button"));
+		selectButton.click();
+		System.out.println("clicked select");
+	}
+	@Then("the price displayed should match the price from the previous page")
+	public void the_product_name_should_match_the_price_from_the_previous_page() {
+	WebElement shadowHost = testContext.driver.findElement(By.cssSelector("edi-checkout"));
+	SearchContext rootNode = shadowHost.getShadowRoot();
+	WebElement secondaryRootHost = rootNode.findElement(By.cssSelector("edi-product-summary"));
+	SearchContext secondaryRootNode = secondaryRootHost.getShadowRoot();
+	WebElement summary = secondaryRootNode.findElement(By.cssSelector("#productSummary"));
+	String currentPrice = summary.findElement(By.cssSelector(".final-price")).getText();
+	
+	Assert.assertTrue(prevPrice.contains(currentPrice));
+
+	}
+	@Then("the product name should match the card title from the previous page")
+	public void the_product_name_should_match_the_card_title_from_the_previous_page() {
+		WebElement shadowHost = testContext.driver.findElement(By.cssSelector("edi-checkout"));
+		SearchContext rootNode = shadowHost.getShadowRoot();
+		WebElement secondaryRootHost = rootNode.findElement(By.cssSelector("edi-product-summary"));
+		SearchContext secondaryRootNode = secondaryRootHost.getShadowRoot();
+		WebElement summary = secondaryRootNode.findElement(By.cssSelector("#productSummary"));
+		String currentName = summary.findElement(By.cssSelector(".title")).getText();
+		
+		Assert.assertTrue(prevName.contains(currentName));
+	}
+	@Then("the provider should be {string}")
+	public void the_provider_should_be(String string) {
+		WebElement shadowHost = testContext.driver.findElement(By.cssSelector("edi-checkout"));
+		SearchContext rootNode = shadowHost.getShadowRoot();
+		WebElement secondaryRootHost = rootNode.findElement(By.cssSelector("edi-product-summary"));
+		SearchContext secondaryRootNode = secondaryRootHost.getShadowRoot();
+		WebElement summary = secondaryRootNode.findElement(By.cssSelector("#productSummary"));
+		String providerName = summary.findElement(By.cssSelector("#providerName")).getText();
+		
+		Assert.assertTrue(providerName.contains(string));
+	}
+	@Then("the contract start date should be todays date in Thailand timezone")
+	public void the_contract_start_date_should_be_todays_date_in_thailand_timezone() {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new io.cucumber.java.PendingException();
+	}
+	@Then("the contract renewal should be {string}")
+	public void the_contract_renewal_should_be(String string) {
+		WebElement shadowHost = testContext.driver.findElement(By.cssSelector("edi-checkout"));
+		SearchContext rootNode = shadowHost.getShadowRoot();
+		WebElement secondaryRootHost = rootNode.findElement(By.cssSelector("edi-product-summary"));
+		SearchContext secondaryRootNode = secondaryRootHost.getShadowRoot();
+		WebElement summary = secondaryRootNode.findElement(By.cssSelector("#productSummary"));
+		String subscriptionRenewal = summary.findElement(By.cssSelector("#subscriptionRenewal")).getText();
+		
+		Assert.assertTrue(subscriptionRenewal.contains(string));
+	}
 
 }
+
+
